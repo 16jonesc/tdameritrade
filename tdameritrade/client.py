@@ -94,8 +94,8 @@ class TDClient(object):
             return requests.get(HISTORY % symbol,
                             headers=self._headers(),
 							params={'periodType':periodType, 'period':period,'frequencyType':frequencyType,'frequency':frequency}).json()
-         else:
-            return requests.get(HISTORY % symbol,
+        else:
+             return requests.get(HISTORY % symbol,
                             headers=self._headers()).json()
 
     def historyDF(self, symbol):
