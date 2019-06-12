@@ -67,9 +67,35 @@ class TDClient(object):
     def quoteDF(self, symbol):
         x = self.quote(symbol)
         return pd.DataFrame(x).T.reset_index(drop=True)
+    
+    def get_periodType(self):
+        return(input("Period Type?:"))
+    def get_period(self):
+        return(input("Period Length?:"))
+    def get_frequencyType(self):
+        return(input("Frequency Type?:"))
+    def get_frequency(self):
+        return(input("Frequency:"))
+    def get_endDate(self):
+        return(input("End Date?:"))
+    def get_startDate(self):
+        return (input("Period Type?:"))
 
-    def history(self, symbol):
-        return requests.get(HISTORY % symbol,
+
+    def history(self, symbol, details=0):
+        if details:
+            periodType= self.get_periodType()
+            period= self.get_period()
+            frequencyType= self.get_frequencyType()
+            frequency= self.get_frequency()
+            #endDate= self.get_endDate()
+            #startDate= self.get_startDate
+            #extendedHours= "true"
+            return requests.get(HISTORY % symbol,
+                            headers=self._headers(),
+							params={'periodType':periodType, 'period':period,'frequencyType':frequencyType,'frequency':frequency}).json()
+         else:
+            return requests.get(HISTORY % symbol,
                             headers=self._headers()).json()
 
     def historyDF(self, symbol):
@@ -77,6 +103,7 @@ class TDClient(object):
         df = pd.DataFrame(x['candles'])
         df['datetime'] = pd.to_datetime(df['datetime'], unit='ms')
         return df
+
 
     def options(self, symbol):
         return requests.get(OPTIONCHAIN,
